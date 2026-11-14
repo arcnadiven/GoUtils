@@ -2,11 +2,14 @@ package utils
 
 import (
 	"bufio"
-	"github.com/pkg/errors"
 	"io"
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/pkg/errors"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func IsAllNumber(strs []string) bool {
@@ -38,6 +41,58 @@ func IsNumber(str string) bool {
 	return allNumber
 }
 
+// ContainsAllItems 判断 text 是否包含 items 中的所有子串
+func ContainsAllItems(text string, items []string) bool {
+	text = strings.TrimSpace(text)
+	has := true
+	for _, item := range items {
+		if !strings.Contains(strings.ToLower(text), strings.ToLower(item)) {
+			has = false
+			break
+		}
+	}
+	return has
+}
+
+// ContainsItem 判断 text 是否包含 items 中的一个子串
+func ContainsItem(text string, items []string) (string, bool) {
+	text = strings.TrimSpace(text)
+	for _, item := range items {
+		lowerText := strings.ToLower(text)
+		lowerItem := strings.ToLower(item)
+		if strings.Contains(lowerText, lowerItem) {
+			return item, true
+		}
+	}
+	return "", false
+}
+
+// HasPrefixItem 判断 text 的前缀是否匹配 items 中的一个子串
+func HasPrefixItem(text string, items []string) (string, bool) {
+	text = strings.TrimSpace(text)
+	for _, item := range items {
+		lowerText := strings.ToLower(text)
+		lowerItem := strings.ToLower(item)
+		if strings.HasPrefix(lowerText, lowerItem) {
+			return item, true
+		}
+	}
+	return "", false
+}
+
+// HasItem 判断 text 是否等于 items 中的一个子串
+func HasItem(text string, items []string) (string, bool) {
+	text = strings.TrimSpace(text)
+	for _, item := range items {
+		lowerText := strings.ToLower(text)
+		lowerItem := strings.ToLower(item)
+		if lowerText == lowerItem {
+			return item, true
+		}
+	}
+	return "", false
+}
+
 func HasHan(str string) bool {
 	for _, char := range str {
 		if unicode.Is(unicode.Han, char) {
@@ -45,6 +100,28 @@ func HasHan(str string) bool {
 		}
 	}
 	return false
+}
+
+// ToTitle 转换为标题格式（首字母大写）
+func ToTitle(str string) string {
+	title := cases.Title(language.Und)
+	return title.String(str)
+}
+
+func Int32Join(slice []int32, sep string) string {
+	ret := []string{}
+	for _, item := range slice {
+		ret = append(ret, strconv.Itoa(int(item)))
+	}
+	return strings.Join(ret, sep)
+}
+
+func Int64Join(items []int64, sep string) string {
+	ret := []string{}
+	for _, item := range items {
+		ret = append(ret, strconv.FormatInt(item, 10))
+	}
+	return strings.Join(ret, sep)
 }
 
 func ReadLines(rd io.Reader) ([]string, error) {

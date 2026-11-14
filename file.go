@@ -1,12 +1,13 @@
 package utils
 
 import (
-	"github.com/pkg/errors"
-	"github.com/xuri/excelize/v2"
 	"os"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/pkg/errors"
+	"github.com/xuri/excelize/v2"
 )
 
 func ReadExcelToObject(filePath, sheet string, object interface{}) error {

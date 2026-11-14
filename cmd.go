@@ -3,9 +3,10 @@ package utils
 import (
 	"context"
 	"fmt"
-	"github.com/pkg/errors"
 	"os/exec"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 func Execute(format string, args ...any) (string, error) {
