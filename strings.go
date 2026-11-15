@@ -5,41 +5,11 @@ import (
 	"io"
 	"strconv"
 	"strings"
-	"unicode"
 
 	"github.com/pkg/errors"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
-
-func IsAllNumber(strs []string) bool {
-	for _, str := range strs {
-		if !IsNumber(str) {
-			return false
-		}
-	}
-	return true
-}
-
-func IsNumber(str string) bool {
-	if len(str) == 0 {
-		return false
-	}
-	if _, err := strconv.ParseFloat(str, 64); err == nil {
-		return true
-	}
-	if _, err := strconv.ParseInt(str, 10, 64); err == nil {
-		return true
-	}
-	allNumber := true
-	for _, char := range str {
-		if !unicode.IsNumber(char) {
-			allNumber = false
-			break
-		}
-	}
-	return allNumber
-}
 
 // ContainsAllItems 判断 text 是否包含 items 中的所有子串
 func ContainsAllItems(text string, items []string) bool {
@@ -93,24 +63,15 @@ func HasItem(text string, items []string) (string, bool) {
 	return "", false
 }
 
-func HasHan(str string) bool {
-	for _, char := range str {
-		if unicode.Is(unicode.Han, char) {
-			return true
-		}
-	}
-	return false
-}
-
 // ToTitle 转换为标题格式（首字母大写）
 func ToTitle(str string) string {
 	title := cases.Title(language.Und)
 	return title.String(str)
 }
 
-func Int32Join(slice []int32, sep string) string {
+func Int32Join(items []int32, sep string) string {
 	ret := []string{}
-	for _, item := range slice {
+	for _, item := range items {
 		ret = append(ret, strconv.Itoa(int(item)))
 	}
 	return strings.Join(ret, sep)
